@@ -153,7 +153,7 @@ final class Stat
 
     public function __construct(string $filename)
     {
-        if (!$stat = \stat($filename)) {
+        if (!$stat = \lstat($filename)) {
             throw new \InvalidArgumentException("Can not stat file '$filename'");
         }
 
