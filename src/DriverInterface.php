@@ -8,31 +8,49 @@ interface DriverInterface
      * @param string $fileName
      * @param FolderInterface|null $parent
      * @return FileInterface
+     * @internal Used by FolderInterface::getChildren()
      */
     function fileFactory(string $fileName, FolderInterface $parent = null) : FileInterface;
+
+    /**
+     * Set the factory method for creating new File objects.
+     *
+     * @param callable $fileFactory function(DriverInterface $driver, string $fileName, FolderInterface $parent = null) : FileInterface
+     */
+    function setFileFactory(callable $fileFactory);
 
     /**
      * @param string $folderName
      * @param FolderInterface|null $parent
      * @return FolderInterface
+     * @internal Used by FolderInterface::getChildren()
      */
     function folderFactory(string $folderName, FolderInterface $parent = null) : FolderInterface;
 
     /**
-     * Signature for the callback:
-     * function(DriverInterface $driver, string $fileName, FolderInterface $parent = null) : FileInterface
+     * Set the factory method for creating new Folder objects.
      *
-     * @param callable $fileFactory
-     */
-    function setFileFactory(callable $fileFactory);
-
-    /**
-     * Signature for the callback:
-     * function(DriverInterface $driver, string $folderName, FolderInterface $parent = null) : FolderInterface
-     *
-     * @param callable $folderFactory
+     * @param callable $folderFactory function(DriverInterface $driver, string $folderName, FolderInterface $parent = null) : FolderInterface
      */
     function setFolderFactory(callable $folderFactory);
+
+    /**
+     * Hash the supplied file.
+     * You should not use this method directly, use FileInterface::getHash().
+     *
+     * @param FileInterface $file
+     * @return string
+     * @internal Used by FileInterface::getHash()
+     */
+    function hashFile(FileInterface $file) : string;
+
+    /**
+     * Set the method for calculating file hashes.
+     * Some drivers will never use the hash function and instead rely on hashes provided by the underlying storage.
+     *
+     * @param callable $hashFunction function(File $file) : string
+     */
+    function setHashFunction(callable $hashFunction);
 
     /**
      * Call file loaded handler for the supplied file
