@@ -2,6 +2,7 @@
 
 namespace Iqb\Cabinet\FileSystem;
 
+use Iqb\Cabinet\DriverHandlerTrait;
 use Iqb\Cabinet\DriverInterface;
 use Iqb\Cabinet\FileInterface;
 use Iqb\Cabinet\FolderInterface;
@@ -11,6 +12,8 @@ use Iqb\Cabinet\FolderInterface;
  */
 class Driver implements DriverInterface
 {
+    use DriverHandlerTrait;
+
     /**
      * @var bool
      */
@@ -30,31 +33,12 @@ class Driver implements DriverInterface
      */
     private $folderFactory;
 
-    /**
-     * @var callable
-     * @see DriverInterface::setFileLoadedHandler()
-     */
-    private $fileLoadedHandler;
-
-    /**
-     * @var callable
-     * @see DriverInterface::setFolderLoadedHandler()
-     */
-    private $folderLoadedHandler;
-
-    /**
-     * @var callable
-     * @see DriverInterface::setFolderScannedHandler()
-     */
-    private $folderScannedHandler;
-
 
     /**
      * Change the value of the $autoScanFolder property.
-     * Returns the old value
      *
      * @param bool $autoScanFolder
-     * @return bool
+     * @return bool Previous value
      */
     final public function setAutoScanFolders(bool $autoScanFolder) : bool
     {
@@ -65,7 +49,7 @@ class Driver implements DriverInterface
 
 
     /** @inheritdoc */
-    final public function createFile(string $fileName, FolderInterface $parent = null, Stat $stat = null) : FileInterface
+    final public function fileFactory(string $fileName, FolderInterface $parent = null, Stat $stat = null) : FileInterface
     {
         if ($this->fileFactory) {
             $file = ($this->fileFactory)($this, $fileName, $parent, $stat);
@@ -79,7 +63,7 @@ class Driver implements DriverInterface
 
 
     /** @inheritdoc */
-    final public function createFolder(string $folderName, FolderInterface $parent = null, Stat $stat = null) : FolderInterface
+    final public function folderFactory(string $folderName, FolderInterface $parent = null, Stat $stat = null) : FolderInterface
     {
         if ($this->folderFactory) {
             $folder = ($this->folderFactory)($this, $folderName, $parent, $stat);
@@ -108,53 +92,5 @@ class Driver implements DriverInterface
     final public function setFolderFactory(callable $folderFactory)
     {
         $this->folderFactory = $folderFactory;
-    }
-
-
-    /** @inheritdoc */
-    final public function notifyFileLoaded(FileInterface $file)
-    {
-        if ($this->fileLoadedHandler) {
-            ($this->fileLoadedHandler)($this, $file);
-        }
-    }
-
-
-    /** @inheritdoc */
-    final public function setFileLoadedHandler(callable $fileLoadedHandler)
-    {
-        $this->fileLoadedHandler = $fileLoadedHandler;
-    }
-
-
-    /** @inheritdoc */
-    final public function notifyFolderLoaded(FolderInterface $folder)
-    {
-        if ($this->folderLoadedHandler) {
-            ($this->folderLoadedHandler)($this, $folder);
-        }
-    }
-
-
-    /** @inheritdoc */
-    final public function setFolderLoadedHandler(callable $folderLoadedHandler)
-    {
-        $this->folderLoadedHandler = $folderLoadedHandler;
-    }
-
-
-    /** @inheritdoc */
-    final public function notifyFolderScannedHandler(FolderInterface $folder)
-    {
-        if ($this->folderScannedHandler) {
-            ($this->folderScannedHandler)($this, $folder);
-        }
-    }
-
-
-    /** @inheritdoc */
-    final public function setFolderScannedHandler(callable $folderScannedHandler)
-    {
-        $this->folderScannedHandler = $folderScannedHandler;
     }
 }

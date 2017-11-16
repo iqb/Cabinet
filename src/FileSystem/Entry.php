@@ -51,7 +51,7 @@ abstract class Entry implements EntryInterface
             $dir = \dirname($name);
 
             $oldAutoScanFolders = $this->driver->setAutoScanFolders(false);
-            $this->parent = $this->driver->createFolder($dir);
+            $this->parent = $this->driver->folderFactory($dir);
             $this->driver->setAutoScanFolders($oldAutoScanFolders);
         }
 

@@ -49,17 +49,17 @@ class Folder extends Entry implements FolderInterface
                 $stat = new Stat($basedir . \DIRECTORY_SEPARATOR . $dirEntry);
 
                 if ($stat->isRegularFile) {
-                    $this->children[$dirEntry] = $file = $this->driver->createFile($dirEntry, $this, $stat);
+                    $this->children[$dirEntry] = $file = $this->driver->fileFactory($dirEntry, $this, $stat);
                 }
 
                 elseif ($stat->isDirectory) {
-                    $this->children[$dirEntry] = $folder = $this->driver->createFolder($dirEntry, $this, $stat);
+                    $this->children[$dirEntry] = $folder = $this->driver->folderFactory($dirEntry, $this, $stat);
                 }
 
                 // Handle special case
             }
 
-            $this->driver->notifyFolderScannedHandler($this);
+            $this->driver->notifyFolderScanned($this);
         }
 
         return $this->children;

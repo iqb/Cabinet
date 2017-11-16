@@ -9,14 +9,14 @@ interface DriverInterface
      * @param FolderInterface|null $parent
      * @return FileInterface
      */
-    function createFile(string $fileName, FolderInterface $parent = null) : FileInterface;
+    function fileFactory(string $fileName, FolderInterface $parent = null) : FileInterface;
 
     /**
      * @param string $folderName
      * @param FolderInterface|null $parent
      * @return FolderInterface
      */
-    function createFolder(string $folderName, FolderInterface $parent = null) : FolderInterface;
+    function folderFactory(string $folderName, FolderInterface $parent = null) : FolderInterface;
 
     /**
      * Signature for the callback:
@@ -42,14 +42,23 @@ interface DriverInterface
     function notifyFileLoaded(FileInterface $file);
 
     /**
-     * Called after a file object is initialized
+     * Register a handler that is called after a File object was initialized
      *
      * Signature for the callback:
-     * function(Driver $driver, fileInterface $file)
+     * function(fileInterface $file, Driver $driver, string $handlerName)
      *
      * @param callable $fileLoadedHandler
+     * @param string|null $name Name to register handler as, auto generate name if null
+     * @return string Name this handler is registered under
      */
-    function setFileLoadedHandler(callable $fileLoadedHandler);
+    function registerFileLoadedHandler(callable $fileLoadedHandler, string $name = null) : string;
+
+    /**
+     * Remove a previously registered handler
+     *
+     * @param string $name Name returned by registerFileLoadedHandler()
+     */
+    function unregisterFileLoadedHandler(string $name);
 
     /**
      * Call folder loaded handler for the supplied folder
@@ -59,29 +68,41 @@ interface DriverInterface
     function notifyFolderLoaded(FolderInterface $folder);
 
     /**
-     * Called after a folder is created but before all children are scanned
+     * Register a handler that is called after a folder is initialized but before all children are scanned
      *
-     * Signature for the callback:
-     * function(Driver $driver, FolderInterface $folder)
-     *
-     * @param callable $folderLoadedHandler
+     * @param callable $folderLoadedHandler Signature: function(FolderInterface $folder, Driver $driver, string $handlerName)
+     * @param string|null $name Name to register handler as, auto generate name if null
+     * @return string Name this handler is registered under
      */
-    function setFolderLoadedHandler(callable $folderLoadedHandler);
+    function registerFolderLoadedHandler(callable $folderLoadedHandler, string $name = null) : string;
+
+    /**
+     * Remove a previously registered handler
+     *
+     * @param string $name Name returned by registerFolderLoadedHandler()
+     */
+    function unregisterFolderLoadedHandler(string $name);
 
     /**
      * Call folder scanned handler for the supplied folder
      *
      * @param FolderInterface $folder
      */
-    function notifyFolderScannedHandler(FolderInterface $folder);
+    function notifyFolderScanned(FolderInterface $folder);
 
     /**
-     * Called after a folder is created and all children are scanned
+     * Register a handler that is called after a folder is created and all children are scanned
      *
-     * Signature for the callback:
-     * function(Driver $driver, FolderInterface $folder)
-     *
-     * @param callable $folderScannedHandler
+     * @param callable $folderScannedHandler Signature: function(FolderInterface $folder, Driver $driver, string $handlerName)
+     * @param string|null $name Name to register handler as, auto generate name if null
+     * @return string Name this handler is registered under
      */
-    function setFolderScannedHandler(callable $folderScannedHandler);
+    function registerFolderScannedHandler(callable $folderScannedHandler, string $name = null) : string;
+
+    /**
+     * Remove a previously registered handler
+     *
+     * @param string $name Name returned by registerFolderScannedHandler()
+     */
+    function unregisterFolderScannedHandler(string $name);
 }
