@@ -67,6 +67,13 @@ class Folder extends Entry implements FolderInterface
 
 
     /** @inheritdoc */
+    public function hasChild(string $name): bool
+    {
+        return \array_key_exists($name, $this->getChildren());
+    }
+
+
+    /** @inheritdoc */
     public function getChild(string $name): EntryInterface
     {
         // Initialize children

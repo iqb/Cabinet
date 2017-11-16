@@ -20,6 +20,14 @@ interface FolderInterface extends EntryInterface
     function isParent(EntryInterface $child) : bool;
 
     /**
+     * Check whether the folder contains a child with the supplied name
+     *
+     * @param string $name
+     * @return bool
+     */
+    function hasChild(string $name) : bool;
+
+    /**
      * Get a single child identified by the supplied name.
      *
      * @FIXME
