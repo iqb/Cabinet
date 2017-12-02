@@ -21,12 +21,20 @@ interface EntryInterface
 
     /**
      * Change the name of this entry.
-     * On error, an Exception must be thrown
      *
      * @param string $newName
-     * @throws \InvalidArgumentException
+     * @throws \Exception Rename failed
      */
     function rename(string $newName);
+
+    /**
+     * Move a file to another folder and optionally rename it.
+     *
+     * @param FolderInterface $newParent
+     * @param string|null $newName
+     * @throws \Exception Move failed
+     */
+    function move(FolderInterface $newParent, string $newName = null);
 
     /**
      * Check whether the file has at least one parent.
