@@ -145,4 +145,16 @@ abstract class Entry implements EntryInterface
     {
         $this->stat = $stat;
     }
+
+
+    final public function rename(string $newName)
+    {
+        // TODO: Implement rename() method.
+    }
+
+
+    final public function move(FolderInterface $newParent, string $newName = null)
+    {
+        // TODO: Implement move() method.
+    }
 }

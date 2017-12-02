@@ -15,11 +15,6 @@ class Folder extends Entry implements FolderInterface
     private $children;
 
 
-    /** @inheritdoc */
-    public function rename(string $newName)
-    {
-    }
-
 
     /** @inheritdoc */
     public function delete() : bool

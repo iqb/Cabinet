@@ -15,13 +15,6 @@ class File extends Entry implements FileInterface
 
 
     /** @inheritdoc */
-    public function rename(string $newName)
-    {
-
-    }
-
-
-    /** @inheritdoc */
     public function delete() : bool
     {
 
@@ -34,11 +27,13 @@ class File extends Entry implements FileInterface
         return $this->stat->size;
     }
 
+
     /** @inheritdoc */
     final public function hasHash(): bool
     {
         return ($this->md5 !== null);
     }
+
 
     /** @inheritdoc */
     final public function getHash(): string
