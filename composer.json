@@ -1,6 +1,6 @@
 {
     "name": "iqb/cabinet",
-    "description": "File access abstraction library.",
+    "description": "Cabinet - file access abstraction library.",
     "authors": [{
         "name": "Dennis Birkholz",
         "email": "cabinet@birkholz.org"
@@ -19,9 +19,10 @@
     },
     "require": {
         "php": ">=7.0",
+        "ext-igbinary": ">=2.0",
         "google/apiclient": "^2.0",
         "iqb/ecryptfs": "@dev",
-        "ext-igbinary": ">=2.0"
+        "psr/log": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^6"
