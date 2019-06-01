@@ -12,11 +12,32 @@ namespace Iqb\Cabinet\Drawer;
 interface EntryInterface
 {
     /**
-     * Get the complete path of the file or directory
+     * Delete the entry
+     *
+     * @return bool
+     */
+    function delete() : bool;
+
+    /**
+     * Get the creation date of this entry
+     *
+     * @return \DateTimeInterface
+     */
+    function getCreatedTime() : \DateTimeInterface;
+
+    /**
+     * Get the unique identifier for this entry
      *
      * @return string
      */
-    function getPath() : string;
+    function getId() : string;
+
+    /**
+     * Get the modification date of this entry
+     *
+     * @return \DateTimeInterface
+     */
+    function getModifiedTime() : \DateTimeInterface;
 
     /**
      * Get the name this file is known by.
@@ -27,36 +48,12 @@ interface EntryInterface
     function getName() : string;
 
     /**
-     * Change the name of this entry.
-     *
-     * @param string $newName
-     * @throws \Exception Rename failed
-     */
-    function rename(string $newName);
-
-    /**
-     * Move a file to another folder and optionally rename it.
-     *
-     * @param FolderInterface $newParent
-     * @param string|null $newName
-     * @throws \Exception Move failed
-     */
-    function move(FolderInterface $newParent, string $newName = null);
-
-    /**
-     * Check whether the file has at least one parent.
-     * Most file systems will only allow a single parent but some allow more than one parent.
-     *
-     * @return bool
-     */
-    function hasParents() : bool;
-
-    /**
      * Get the (first) folder this entry is contained in
+     * Only root folders will have no parent and thus return null;
      *
-     * @return FolderInterface
+     * @return FolderInterface|null
      */
-    function getParent() : FolderInterface;
+    function getParent() : ?FolderInterface;
 
     /**
      * Get all folders this entry is contained in
@@ -66,11 +63,19 @@ interface EntryInterface
     function getParents() : array;
 
     /**
-     * Delete the entry from all its parents
+     * Get the complete path of the file or directory
      *
-     * @return bool
+     * @return string
      */
-    function delete() : bool;
+    function getPath() : string;
+
+    /**
+     * Get custom properties of this entry.
+     * Some drivers may not be able to store properties.
+     *
+     * @return array
+     */
+    function getProperties() : array;
 
     /**
      * Get the size of the file or the total size of the directory in bytes
@@ -78,4 +83,41 @@ interface EntryInterface
      * @return int
      */
     function getSize() : int;
+
+    /**
+     * Move this entry to another folder and optionally rename it.
+     *
+     * @param FolderInterface $newParent
+     * @param string|null $newName
+     * @param bool $overwrite
+     * @return EntryInterface $this or a new entry, driver dependent.
+     * @throws \Exception Move failed
+     */
+    function move(FolderInterface $newParent, string $newName = null, bool $overwrite = false) : EntryInterface;
+
+    /**
+     * Change the name of this entry.
+     *
+     * @param string $newName
+     * @param bool $overwrite Whether to remove a file with the same name before renaming.
+     * @return EntryInterface $this or a new entry, driver dependent.
+     * @throws \Exception Rename failed
+     */
+    function rename(string $newName, bool $overwrite = false) : EntryInterface;
+
+    /**
+     * Update the created at timestamp
+     *
+     * @param \DateTimeInterface $createdTime
+     * @return $this
+     */
+    function setCreatedTime(\DateTimeInterface $createdTime) : self;
+
+    /**
+     * Update the modified at timestamp
+     *
+     * @param \DateTimeInterface $modifiedTime
+     * @return $this
+     */
+    function setModifiedTime(\DateTimeInterface $modifiedTime) : self;
 }

@@ -10,11 +10,13 @@
     "autoload": {
         "psr-4": {
             "Iqb\\Cabinet\\Drawer\\": "src/Drawer/src/",
+            "Iqb\\Cabinet\\GDrive\\": "src/GDrive/src/",
             "Iqb\\Cabinet\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
+            "Iqb\\Cabinet\\GDrive\\": "tests/",
             "Iqb\\Cabinet\\": "tests/"
         }
     },

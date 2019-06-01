@@ -11,35 +11,86 @@ namespace Iqb\Cabinet\Drawer;
 
 interface DriverInterface
 {
-    /**
-     * @param string $fileName
-     * @param FolderInterface|null $parent
-     * @return FileInterface
-     * @internal Used by FolderInterface::getChildren()
-     */
-    function fileFactory(string $fileName, FolderInterface $parent = null) : FileInterface;
+    ######################################################################
+    # Manage entries                                                     #
+    ######################################################################
 
     /**
-     * Set the factory method for creating new File objects.
+     * Get the root element
      *
-     * @param callable $fileFactory function(DriverInterface $driver, string $fileName, FolderInterface $parent = null) : FileInterface
+     * @return FolderInterface|null
      */
-    function setFileFactory(callable $fileFactory);
+    function getRoot() : ?FolderInterface;
 
     /**
-     * @param string $folderName
-     * @param FolderInterface|null $parent
+     * Access a file or directory by identifier.
+     * The ID is implementation dependent and may be the inode for a local file system or
+     *  some arbitrary file identifier provided by the storage backend.
+     *
+     * @param string $entryId
+     * @return EntryInterface|null
+     */
+    function getEntryById(string $entryId) : ?EntryInterface;
+
+    /**
+     * Get an entry from the supplied folder
+     *
+     * @param FolderInterface $folder
+     * @param string $entryName
+     * @return EntryInterface|null
+     */
+    function getEntryFromFolder(FolderInterface $folder, string $entryName) : ?EntryInterface;
+
+    /**
+     * Get all entries that are direct children of the supplied folder
+     *
+     * @param FolderInterface $folder
+     * @return EntryInterface[]|null
+     */
+    function getEntries(FolderInterface $folder) : ?\Traversable;
+
+    /**
+     * Create a new folder below the provided parent folder
+     *
+     * @param FolderInterface $parent
+     * @param string $name
      * @return FolderInterface
-     * @internal Used by FolderInterface::getChildren()
      */
-    function folderFactory(string $folderName, FolderInterface $parent = null) : FolderInterface;
+    function createFolder(FolderInterface $parent, string $name) : FolderInterface;
 
     /**
-     * Set the factory method for creating new Folder objects.
+     * Delete the supplied entry.
      *
-     * @param callable $folderFactory function(DriverInterface $driver, string $folderName, FolderInterface $parent = null) : FolderInterface
+     * @param EntryInterface $entry
+     * @param bool $recursive
+     * @return bool
      */
-    function setFolderFactory(callable $folderFactory);
+    function deleteEntry(EntryInterface $entry, bool $recursive = false) : bool;
+
+//    /**
+//     * Get a file by specifying the the path name relative to the file system root or the supplied folder
+//     *
+//     * @param string $filePath
+//     * @param FolderInterface|null $rootFolder
+//     * @return FileInterface|null
+//     */
+//    function getFileByPath(string $filePath, FolderInterface $rootFolder = null) : ?FileInterface;
+//
+//    /**
+//     * Get all files that are direct children of the supplied folder
+//     *
+//     * @param FolderInterface $folder
+//     * @return FileInterface[]|null
+//     */
+//    function getFiles(FolderInterface $folder) : ?\Traversable;
+//
+//    /**
+//     * Recursively get all files in the supplied folder
+//     *
+//     * @param FolderInterface $folder
+//     * @return FileInterface[]|null
+//     */
+//    function getFilesRecursive(FolderInterface $folder) : ?\Traversable;
 
     /**
      * Hash the supplied file.
@@ -58,76 +109,4 @@ interface DriverInterface
      * @param callable $hashFunction function(File $file) : string
      */
     function setHashFunction(callable $hashFunction);
-
-    /**
-     * Call file loaded handler for the supplied file
-     *
-     * @param FileInterface $file
-     */
-    function notifyFileLoaded(FileInterface $file);
-
-    /**
-     * Register a handler that is called after a File object was initialized
-     *
-     * Signature for the callback:
-     * function(fileInterface $file, Driver $driver, string $handlerName)
-     *
-     * @param callable $fileLoadedHandler
-     * @param string|null $name Name to register handler as, auto generate name if null
-     * @return string Name this handler is registered under
-     */
-    function registerFileLoadedHandler(callable $fileLoadedHandler, string $name = null) : string;
-
-    /**
-     * Remove a previously registered handler
-     *
-     * @param string $name Name returned by registerFileLoadedHandler()
-     */
-    function unregisterFileLoadedHandler(string $name);
-
-    /**
-     * Call folder loaded handler for the supplied folder
-     *
-     * @param FolderInterface $folder
-     */
-    function notifyFolderLoaded(FolderInterface $folder);
-
-    /**
-     * Register a handler that is called after a folder is initialized but before all children are scanned
-     *
-     * @param callable $folderLoadedHandler Signature: function(FolderInterface $folder, Driver $driver, string $handlerName)
-     * @param string|null $name Name to register handler as, auto generate name if null
-     * @return string Name this handler is registered under
-     */
-    function registerFolderLoadedHandler(callable $folderLoadedHandler, string $name = null) : string;
-
-    /**
-     * Remove a previously registered handler
-     *
-     * @param string $name Name returned by registerFolderLoadedHandler()
-     */
-    function unregisterFolderLoadedHandler(string $name);
-
-    /**
-     * Call folder scanned handler for the supplied folder
-     *
-     * @param FolderInterface $folder
-     */
-    function notifyFolderScanned(FolderInterface $folder);
-
-    /**
-     * Register a handler that is called after a folder is created and all children are scanned
-     *
-     * @param callable $folderScannedHandler Signature: function(FolderInterface $folder, Driver $driver, string $handlerName)
-     * @param string|null $name Name to register handler as, auto generate name if null
-     * @return string Name this handler is registered under
-     */
-    function registerFolderScannedHandler(callable $folderScannedHandler, string $name = null) : string;
-
-    /**
-     * Remove a previously registered handler
-     *
-     * @param string $name Name returned by registerFolderScannedHandler()
-     */
-    function unregisterFolderScannedHandler(string $name);
 }

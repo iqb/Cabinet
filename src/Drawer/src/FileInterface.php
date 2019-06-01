@@ -12,11 +12,22 @@ namespace Iqb\Cabinet\Drawer;
 interface FileInterface extends EntryInterface
 {
     /**
-     * Check whether the file as a stored hash value.
+     * Get the content or a chunk of the file.
      *
-     * @return bool
+     * @param int|null $offset
+     * @param int|null $bytes
+     * @return string
      */
-    function hasHash() : bool;
+    function getContent(int $offset = null, int $bytes = null) : string;
+
+    /**
+     * Get the content or a chunk of the file as a stream.
+     *
+     * @param int|null $offset
+     * @param int|null $bytes
+     * @return resource
+     */
+    function getContentStream(int $offset = null, int $bytes = null);
 
     /**
      * Get a hash of the file (if stored) or calculate it.
@@ -25,4 +36,11 @@ interface FileInterface extends EntryInterface
      * @return string
      */
     function getHash() : string;
+
+    /**
+     * Check whether the file as a stored hash value.
+     *
+     * @return bool
+     */
+    function hasHash() : bool;
 }
