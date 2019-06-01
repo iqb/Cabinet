@@ -2,12 +2,12 @@
 
 /*
  * This file is part of Cabinet - file access abstraction library for PHP.
- * (c) 2017 by Dennis Birkholz
+ * (c) by Dennis Birkholz <cabinet@birkholz.org>
  * All rights reserved.
  * For the license to use this library, see the provided LICENSE file.
  */
 
-namespace Iqb\Cabinet;
+namespace Iqb\Cabinet\Drawer;
 
 interface FileInterface extends EntryInterface
 {

@@ -1,0 +1,20 @@
+{
+    "name": "iqb/cabinet-drawer",
+    "description": "Cabinet (file access abstraction library): base interfaces",
+    "authors": [{
+        "name": "Dennis Birkholz",
+        "email": "cabinet@birkholz.org"
+    }],
+    "type": "library",
+    "license": "LGPL-3",
+    "autoload": {
+        "psr-4": {
+            "Iqb\\Cabinet\\Drawer\\": [
+                "src/"
+            ]
+        }
+    },
+    "require": {
+        "php": ">=7.0"
+    }
+}
